@@ -45,12 +45,23 @@ namespace CoreTool.Loaders.Windows
                 {
                     if (!package.PackageMoniker.StartsWith(packageName + "_")) continue;
                     int platformTarget = package.ApplicabilityBlob.ContentTargetPlatforms[0].PlatformTarget;
-                    Console.WriteLine(package.PackageUri.LocalPath);
+                    
                     if (platformTarget !=0
                         && platformTarget != 3) continue;
-
+                        
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.connect();
+                    String raw = conn.getHeaderField("Content-Disposition");
+                    
                     string fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
-
+                    
+                    if (raw != null && raw.indexOf("=") > 0) {
+                    fullPackageName = raw.split("=")[1];
+                    fullPackageName = new String(fileName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8); }
+                    Console.WriteLine(fullPackageName);
+                    
+                    
                     // Create the meta and store it
                     Item item = new Item(Utils.GetVersionFromName(fullPackageName));
                     item.Archs[Utils.GetArchFromName(fullPackageName)] = new Arch(fullPackageName, new List<string>() { Guid.Parse(package.UpdateId).ToString() });
