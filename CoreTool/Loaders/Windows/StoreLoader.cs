@@ -48,19 +48,14 @@ namespace CoreTool.Loaders.Windows
                     
                     if (platformTarget !=0
                         && platformTarget != 3) continue;
-                        
-                    HttpURLConnection conn = (HttpURLConnection) package.PackageUri.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.connect();
-                    String raw = conn.getHeaderField("Content-Disposition");
                     
-                    string fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
+                    //Automatically convert WSA file suffix name to msixbundle
+                    string fullPackageName;
+                    if (package.PackageMoniker.IndexOf("MicrosoftCorporationII.WindowsSubsystemForAndroid") > 0)
+                    fullPackageName = package.PackageMoniker + ".Msixbundle";
+                    else fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
                     
-                    if (raw != null && raw.indexOf("=") > 0) {
-                    fullPackageName = raw.split("=")[1];
-                    fullPackageName = new String(fileName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8); }
-                    Console.WriteLine(fullPackageName);
-                    
+                    //string fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
                     
                     // Create the meta and store it
                     Item item = new Item(Utils.GetVersionFromName(fullPackageName));
@@ -99,8 +94,14 @@ namespace CoreTool.Loaders.Windows
                         int platformTarget = package.ApplicabilityBlob.ContentTargetPlatforms[0].PlatformTarget;
                         if (platformTarget != 0
                             && platformTarget != 3) continue;
-
-                        string fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
+                        
+                        //Automatically convert WSA file suffix name to msixbundle
+                        string fullPackageName;
+                        if (package.PackageMoniker.IndexOf("MicrosoftCorporationII.WindowsSubsystemForAndroid") > 0)
+                        fullPackageName = package.PackageMoniker + ".Msixbundle";
+                        else fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
+                    
+                        //string fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
 
                         // Check we haven't got a release version in the beta request
                         if (Utils.GetVersionFromName(fullPackageName) == releaseVer)
