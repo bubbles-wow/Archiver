@@ -37,13 +37,13 @@ namespace CoreTool
             {
                 return GetVersionFromNameAppx(fileName);
             }
-            else if (extension == ".appxbundle")
+            else if (extension == ".appxbundle" || extension == ".msixbundle")
             {
                 string version = fileName.Split("_")[1];
-                if (version.Split(".").Length > 3)
+                /*if (version.Split(".").Length > 3)
                 {
                     version = Regex.Replace(version, "\\.00?$", "");
-                }
+                }*/
 
                 return version;
             }
@@ -99,7 +99,7 @@ namespace CoreTool
         {
             string fileName = Path.GetFileNameWithoutExtension(name);
             string extension = Path.GetExtension(name).ToLower();
-            if (extension.StartsWith(".appx"))
+            if (extension.StartsWith(".appx") || extension.StartsWith(".msix"))
             {
                 return fileName.Split("_")[2];
             }

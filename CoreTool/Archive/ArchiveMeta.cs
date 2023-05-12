@@ -124,7 +124,7 @@ namespace CoreTool.Archive
         /// <param name="e"></param>
         public void DownloadProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            Logger.WriteRaw("\r{0}%", e.ProgressPercentage);
+            Logger.WriteRaw("\rDownload Progress: {0}%", e.ProgressPercentage);
         }
 
         internal void Save()

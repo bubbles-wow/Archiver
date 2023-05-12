@@ -48,10 +48,10 @@ namespace CoreTool.Loaders.Windows
                     
                     if (platformTarget !=0
                         && platformTarget != 3) continue;
-                    
+
                     //Automatically convert WSA file suffix name to msixbundle
                     string fullPackageName;
-                    if (package.PackageMoniker.IndexOf("MicrosoftCorporationII.WindowsSubsystemForAndroid") > 0)
+                    if (package.PackageMoniker.IndexOf("WindowsSubsystemForAndroid") > 0)
                     fullPackageName = package.PackageMoniker + ".Msixbundle";
                     else fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
                     
@@ -97,7 +97,7 @@ namespace CoreTool.Loaders.Windows
                         
                         //Automatically convert WSA file suffix name to msixbundle
                         string fullPackageName;
-                        if (package.PackageMoniker.IndexOf("MicrosoftCorporationII.WindowsSubsystemForAndroid") > 0)
+                        if (package.PackageMoniker.IndexOf("WindowsSubsystemForAndroid") > 0)
                         fullPackageName = package.PackageMoniker + ".Msixbundle";
                         else fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
                     

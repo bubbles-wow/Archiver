@@ -29,7 +29,7 @@ namespace CoreTool.Checkers.Windows
                     string outPath = Path.Join(archive.ArchiveDir, arch.FileName);
                     if (!File.Exists(outPath))
                     {
-                        archive.Logger.Write($"Downloading {arch.FileName}");
+                        archive.Logger.Write($"Preparing for downloading");
 
                         List<string> updateIds = arch.UpdateIds.Select(guid => guid.ToString()).ToList();
                         List<string> revisionIds = new List<string>();
@@ -45,8 +45,9 @@ namespace CoreTool.Checkers.Windows
 
                             try
                             {
-                                archive.Logger.Write("Sucessfully generated link:");
-                                Console.WriteLine(uri.OriginalString);
+                                archive.Logger.Write("Sucessfully generate vaild url");
+                                archive.Logger.Write($"File Name: {arch.FileName}");
+                                archive.Logger.Write($"URL: {uri.OriginalString}");
                                 await httpClient.DownloadFileTaskAsync(uri, outPath, archive.DownloadProgressChanged);
                                 Console.WriteLine();
                                 archive.Logger.WriteWarn("Calculating file hashes, this may take some time");

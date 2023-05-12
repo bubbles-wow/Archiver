@@ -50,7 +50,8 @@ namespace CoreTool
 
         private string GetPrefix(string type = "INFO")
         {
-            return $"[{DateTime.Now.ToString("d")} {DateTime.Now.ToString("HH:mm:ss")} {type}]" + (prefix != null ? $"[{prefix}]" : "") + " ";
+            return (prefix != null ? $"[{prefix}]" : "") + " ";
+            //return $"[{DateTime.Now.ToString("d")} {DateTime.Now.ToString("HH:mm:ss")} {type}]" + (prefix != null ? $"[{prefix}]" : "") + " ";
         }
     }
 }
