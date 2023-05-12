@@ -49,7 +49,7 @@ namespace CoreTool.Loaders.Windows
                     if (platformTarget !=0
                         && platformTarget != 3) continue;
                         
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    HttpURLConnection conn = (HttpURLConnection) package.PackageUri.openConnection();
                     conn.setRequestMethod("GET");
                     conn.connect();
                     String raw = conn.getHeaderField("Content-Disposition");
