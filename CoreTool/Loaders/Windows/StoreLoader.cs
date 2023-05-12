@@ -45,9 +45,8 @@ namespace CoreTool.Loaders.Windows
                 {
                     if (!package.PackageMoniker.StartsWith(packageName + "_")) continue;
                     int platformTarget = package.ApplicabilityBlob.ContentTargetPlatforms[0].PlatformTarget;
-                    Console.Write("platformTarget = ");
-                    Console.WriteLine(platformTarget);
-                    if (platformTarget != 0
+                    Console.WriteLine(package.PackageUri.LocalPath);
+                    if (platformTarget !=0
                         && platformTarget != 3) continue;
 
                     string fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
@@ -87,8 +86,6 @@ namespace CoreTool.Loaders.Windows
                     {
                         if (!package.PackageMoniker.StartsWith(packageName + "_")) continue;
                         int platformTarget = package.ApplicabilityBlob.ContentTargetPlatforms[0].PlatformTarget;
-                        Console.Write("platformTarget = ");
-                        Console.WriteLine(platformTarget);
                         if (platformTarget != 0
                             && platformTarget != 3) continue;
 
@@ -97,7 +94,7 @@ namespace CoreTool.Loaders.Windows
                         // Check we haven't got a release version in the beta request
                         if (Utils.GetVersionFromName(fullPackageName) == releaseVer)
                         {
-                            archive.Logger.WriteError($"You need to opt into the beta! Release version found in beta request. See https://aka.ms/JoinMCBeta");
+                            archive.Logger.WriteError($"You need to opt into the beta! Release version found in beta request.");
                             break;
                         }
 
