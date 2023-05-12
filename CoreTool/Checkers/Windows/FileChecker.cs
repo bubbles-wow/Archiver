@@ -45,6 +45,7 @@ namespace CoreTool.Checkers.Windows
 
                             try
                             {
+                                archive.Logger.Write("Sucessfully generated link:");
                                 Console.WriteLine(uri.OriginalString);
                                 await httpClient.DownloadFileTaskAsync(uri, outPath, archive.DownloadProgressChanged);
                                 Console.WriteLine();
