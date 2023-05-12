@@ -45,6 +45,7 @@ namespace CoreTool.Checkers.Windows
 
                             try
                             {
+                                Console.WriteLine(uri.OriginalString);
                                 await httpClient.DownloadFileTaskAsync(uri, outPath, archive.DownloadProgressChanged);
                                 Console.WriteLine();
                                 archive.Logger.WriteWarn("Calculating file hashes, this may take some time");
