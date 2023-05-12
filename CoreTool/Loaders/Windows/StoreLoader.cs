@@ -45,6 +45,8 @@ namespace CoreTool.Loaders.Windows
                 {
                     if (!package.PackageMoniker.StartsWith(packageName + "_")) continue;
                     int platformTarget = package.ApplicabilityBlob.ContentTargetPlatforms[0].PlatformTarget;
+                    Console.Write("platformTarget = ");
+                    Console.WriteLine(platformTarget);
                     if (platformTarget != 0
                         && platformTarget != 3) continue;
 
@@ -85,6 +87,8 @@ namespace CoreTool.Loaders.Windows
                     {
                         if (!package.PackageMoniker.StartsWith(packageName + "_")) continue;
                         int platformTarget = package.ApplicabilityBlob.ContentTargetPlatforms[0].PlatformTarget;
+                        Console.Write("platformTarget = ");
+                        Console.WriteLine(platformTarget);
                         if (platformTarget != 0
                             && platformTarget != 3) continue;
 
