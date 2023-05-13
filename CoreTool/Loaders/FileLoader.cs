@@ -28,7 +28,11 @@ namespace CoreTool.Loaders
             foreach (string file in files)
             {
                 // Make sure this is an allowed ext
-                if (!fileExts.Contains(Path.GetExtension(file).ToLower().Substring(1))) continue;
+                //if (!fileExts.Contains(Path.GetExtension(file).ToLower().Substring(1))) continue;
+                string fileExtension = Path.GetExtension(file).ToLower();
+                if (fileExtension != ".appx" && fileExtension != ".appxbundle" &&
+                    fileExtension != ".msix" && fileExtension != ".msixbundle")
+                    continue;
 
                 string fileName = Path.GetFileName(file);
 

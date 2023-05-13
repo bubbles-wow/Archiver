@@ -37,7 +37,7 @@ namespace CoreTool
             {
                 return GetVersionFromNameAppx(fileName);
             }
-            else if (extension == ".appxbundle" || extension == ".msixbundle")
+            else if (extension == ".appxbundle" || extension == ".msixbundle" || extension == ".msix")
             {
                 string version = fileName.Split("_")[1];
                 /*if (version.Split(".").Length > 3)

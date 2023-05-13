@@ -46,8 +46,8 @@ namespace CoreTool.Checkers.Windows
                             try
                             {
                                 archive.Logger.Write("Sucessfully generate vaild url");
-                                archive.Logger.Write($"File Name: {arch.FileName}");
-                                archive.Logger.Write($"URL: {uri.OriginalString}");
+                                archive.Logger.WriteWarn($"File Name: {arch.FileName}");
+                                archive.Logger.WriteWarn($"URL: {uri.OriginalString}");
                                 await httpClient.DownloadFileTaskAsync(uri, outPath, archive.DownloadProgressChanged);
                                 Console.WriteLine();
                                 archive.Logger.WriteWarn("Calculating file hashes, this may take some time");
