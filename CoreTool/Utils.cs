@@ -40,6 +40,16 @@ namespace CoreTool
             else if (extension == ".appxbundle" || extension == ".msixbundle" || extension == ".msix")
             {
                 string version = fileName.Split("_")[1];
+                
+                //special in edu version
+                if (name.IndexOf("Edu") > 0)
+                {
+                    string shortVer = name.Split("_")[1];
+                    string[] versionPart = shortVer.Split(".");
+                    if (versionPart[3].ToLower() == "appxbundle" || versionPart[3] == "00")
+                        return $"{versionPart[0]}.{versionPart[1]}.{versionPart[2]}.0";
+                    return $"{versionPart[0]}.{versionPart[1]}.{versionPart[2]}.{versionPart[3]}";
+                }
                 /*if (version.Split(".").Length > 3)
                 {
                     version = Regex.Replace(version, "\\.00?$", "");
@@ -61,6 +71,47 @@ namespace CoreTool
         {
             string rawVer = name.Split("_")[1];
             string[] verParts = rawVer.Split('.');
+            //edu solution
+            if (name.IndexOf("Edu") > 0)
+            {
+                int length = verParts[1].Length;
+                if (verParts[0] == "0")
+                {
+                    if (verParts[3] == "0" || verParts[3] == "00")
+                    {
+                        if (length == 3)
+                            return $"{verParts[0]}.{verParts[1].Substring(0, 2)}.{verParts[1].Substring(2, 1)}.0";
+                        if (length == 4)
+                            return $"{verParts[0]}.{verParts[1].Substring(0, 2)}.{verParts[2].Substring(2, 2)}.0";
+                        return $"{verParts[0]}.{verParts[1]}.{verParts[2]}.0";
+                    }
+                    else 
+                    {
+                        if (length == 3)
+                            return $"{verParts[0]}.{verParts[1].Substring(0, 2)}.{verParts[1].Substring(2, 1)}.{verParts[3]}";
+                        if (length == 4)
+                            return $"{verParts[0]}.{verParts[1].Substring(0, 2)}.{verParts[2].Substring(2, 2)}.{verParts[3]}";
+                        return $"{verParts[0]}.{verParts[1]}.{verParts[2]}.{verParts[3]}";
+                    }
+                }
+                else
+                {
+                    if (verParts[3] == "0" || verParts[3] == "00")
+                    {
+                        if (verParts[2].Length > 2)
+                            return $"{verParts[0]}.{verParts[1]}.{verParts[2].Substring(0, 2)}.0";
+                        else
+                            return $"{verParts[0]}.{verParts[1]}.{verParts[2]}.0";
+                    }
+                    else
+                    {
+                        if (verParts[2].Length > 2)
+                            return $"{verParts[0]}.{verParts[1]}.{verParts[2].Substring(0, 2)}.{verParts[3]}";
+                        else
+                            return $"{verParts[0]}.{verParts[1]}.{verParts[2]}.{verParts[3]}";
+                    }
+                }
+            }
 
             // Check if we are a pre-v1 version as they have a different format
             if (verParts[0] == "0")
@@ -101,6 +152,20 @@ namespace CoreTool
             string extension = Path.GetExtension(name).ToLower();
             if (extension.StartsWith(".appx") || extension.StartsWith(".msix"))
             {
+                //special edu version file name
+                if (name.IndexOf("Edu") > 0)
+                {
+                    if (extension == ".appx")
+                    {
+                        if (name.IndexOf("Publish") > 0)
+                        {
+                            string archcache = fileName.Split("_")[2];
+                            return archcache.Split(".")[0];
+                        }
+                    }
+                    else
+                        return "neutral";
+                }
                 return fileName.Split("_")[2];
             }
             else if (extension == ".apk")

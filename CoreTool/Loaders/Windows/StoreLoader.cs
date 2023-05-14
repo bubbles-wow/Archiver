@@ -61,6 +61,9 @@ namespace CoreTool.Loaders.Windows
                     Item item = new Item(Utils.GetVersionFromName(fullPackageName));
                     item.Archs[Utils.GetArchFromName(fullPackageName)] = new Arch(fullPackageName, new List<string>() { Guid.Parse(package.UpdateId).ToString() });
                     if (archive.AddOrUpdate(item, true)) archive.Logger.Write($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+                    //output download url without downloading
+                    archive.Logger.WriteWarn($"File Name: {fullPackageName}");
+                    archive.Logger.WriteWarn($"URL: {package.PackageUri.OriginalString}");
 
                     releaseVer = Utils.GetVersionFromName(fullPackageName);
                 }
@@ -91,6 +94,7 @@ namespace CoreTool.Loaders.Windows
                     foreach (PackageInstance package in packages)
                     {
                         if (!package.PackageMoniker.StartsWith(packageName + "_")) continue;
+                        
                         int platformTarget = package.ApplicabilityBlob.ContentTargetPlatforms[0].PlatformTarget;
                         if (platformTarget != 0
                             && platformTarget != 3) continue;
@@ -100,8 +104,10 @@ namespace CoreTool.Loaders.Windows
                         if (package.PackageMoniker.IndexOf("WindowsSubsystemForAndroid") > 0)
                         fullPackageName = package.PackageMoniker + ".Msixbundle";
                         else fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
-                    
+
                         //string fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
+
+                        
 
                         // Check we haven't got a release version in the beta request
                         if (Utils.GetVersionFromName(fullPackageName) == releaseVer)
@@ -113,7 +119,11 @@ namespace CoreTool.Loaders.Windows
                         // Create the meta and store it
                         Item item = new Item(Utils.GetVersionFromName(fullPackageName));
                         item.Archs[Utils.GetArchFromName(fullPackageName)] = new Arch(fullPackageName, new List<string>() { Guid.Parse(package.UpdateId).ToString() });
-                        if (archive.AddOrUpdate(item, true)) archive.Logger.Write($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+                        if (archive.AddOrUpdate(item, true)) archive.Logger.WriteWarn($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+
+                        //output download url without downloading
+                        archive.Logger.WriteWarn($"File Name: {fullPackageName}");
+                        archive.Logger.WriteWarn($"URL: {package.PackageUri.OriginalString}");
                     }
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
 using CoreTool.Archive;
@@ -41,13 +42,16 @@ namespace CoreTool
             Utils.GenericLogger.Write("Starting update checker");
 
             // Check for updates every 5 mins
-            updateTimer = new Timer(5 * 60 * 1000);
+            updateTimer = new Timer(1 * 60 * 1000);
             updateTimer.Elapsed += OnUpdateEvent;
             updateTimer.AutoReset = true;
             updateTimer.Enabled = true;
 
             Utils.GenericLogger.Write("Press enter to exit at any point");
             Console.ReadLine();
+            //delete AuthInfo
+            if (File.Exists(Path.GetFullPath("msAuthInfo.json")))
+                File.Delete(Path.GetFullPath("msAuthInfo.json"));
         }
 
         private static async void OnUpdateEvent(object sender, ElapsedEventArgs e)
