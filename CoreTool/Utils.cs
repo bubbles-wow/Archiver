@@ -74,42 +74,37 @@ namespace CoreTool
             //edu solution
             if (name.IndexOf("Edu") > 0)
             {
-                int length = verParts[1].Length;
                 if (verParts[0] == "0")
                 {
-                    if (verParts[3] == "0" || verParts[3] == "00")
-                    {
-                        if (length == 3)
-                            return $"{verParts[0]}.{verParts[1].Substring(0, 2)}.{verParts[1].Substring(2, 1)}.0";
-                        if (length == 4)
-                            return $"{verParts[0]}.{verParts[1].Substring(0, 2)}.{verParts[2].Substring(2, 2)}.0";
-                        return $"{verParts[0]}.{verParts[1]}.{verParts[2]}.0";
-                    }
-                    else 
-                    {
-                        if (length == 3)
-                            return $"{verParts[0]}.{verParts[1].Substring(0, 2)}.{verParts[1].Substring(2, 1)}.{verParts[3]}";
-                        if (length == 4)
-                            return $"{verParts[0]}.{verParts[1].Substring(0, 2)}.{verParts[2].Substring(2, 2)}.{verParts[3]}";
-                        return $"{verParts[0]}.{verParts[1]}.{verParts[2]}.{verParts[3]}";
-                    }
+                    if (verParts[1].Length == 3)
+                        return $"{verParts[0]}.{verParts[1].Substring(0, 2)}.{verParts[1].Substring(2, 1)}.0";
+                    if (verParts[1].Length == 4)
+                        return $"{verParts[0]}.{verParts[1].Substring(0, 2)}.{verParts[1].Substring(2, 2)}.0";
+                    return $"{verParts[0]}.{verParts[1]}.{verParts[2]}.0";
                 }
                 else
                 {
-                    if (verParts[3] == "0" || verParts[3] == "00")
+                    if (verParts[1] == "12")
                     {
-                        if (verParts[2].Length > 2)
-                            return $"{verParts[0]}.{verParts[1]}.{verParts[2].Substring(0, 2)}.0";
-                        else
-                            return $"{verParts[0]}.{verParts[1]}.{verParts[2]}.0";
+                        if (verParts[2] == "0") return "1.12.0.0";
+                        if (verParts[2] == "301") return "1.12.3.1";
+                        if (verParts[2] == "501") return "1.12.5.0";
+                        if (verParts[2] == "601") return "1.12.60.0";
+                    }
+                    if (verParts[2].Length > 2)
+                    {
+                        if (verParts[2].Length == 3)
+                            return $"{verParts[0]}.{verParts[1]}.{verParts[2].Substring(0, 2)}.{verParts[2].Substring(2,1)}";
+                        if (verParts[2].Length == 4)
+                        {
+                            if (verParts[2].Substring(2, 2) == "00")
+                                return $"{verParts[0]}.{verParts[1]}.{verParts[2].Substring(0, 2)}.0";
+                            else
+                                return $"{verParts[0]}.{verParts[1]}.{verParts[2].Substring(0, 2)}.{verParts[2].Substring(2, 2)}";
+                        }
                     }
                     else
-                    {
-                        if (verParts[2].Length > 2)
-                            return $"{verParts[0]}.{verParts[1]}.{verParts[2].Substring(0, 2)}.{verParts[3]}";
-                        else
-                            return $"{verParts[0]}.{verParts[1]}.{verParts[2]}.{verParts[3]}";
-                    }
+                        return $"{verParts[0]}.{verParts[1]}.{verParts[2]}.{verParts[3]}";
                 }
             }
 
