@@ -30,10 +30,23 @@ namespace MSAuth.Popup
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "OAuthPopup";
+            SuspendLayout();
+            // 
+            // OAuthPopup
+            // 
+            AutoScaleDimensions = new SizeF(14F, 31F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackgroundImageLayout = ImageLayout.Center;
+            ClientSize = new Size(2099, 1124);
+            Margin = new Padding(2, 5, 2, 5);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "OAuthPopup";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            Text = "Microsoft Account";
+            Load += OAuthPopup_Load;
+            ResumeLayout(false);
         }
 
         #endregion

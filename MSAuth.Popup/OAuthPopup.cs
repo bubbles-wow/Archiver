@@ -74,7 +74,7 @@ namespace MSAuth.Popup
         }
 
         public static string GetAuthToken()
-        { 
+        {
             var popup = new OAuthPopup();
             popup.ShowDialog();
 
@@ -82,5 +82,10 @@ namespace MSAuth.Popup
         }
 
         #endregion
+
+        private void OAuthPopup_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

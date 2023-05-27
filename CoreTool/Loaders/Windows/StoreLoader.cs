@@ -3,6 +3,7 @@ using StoreLib.Models;
 using StoreLib.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,7 +34,7 @@ namespace CoreTool.Loaders.Windows
             // Create a packages var for debugging
             IList<PackageInstance> packages;
             string releaseVer = "";
-
+            string uids = "";
             archive.Logger.Write("Loading release...");
 
             // Grab the packages for the release
@@ -49,6 +50,8 @@ namespace CoreTool.Loaders.Windows
                     if (platformTarget !=0
                         && platformTarget != 3) continue;
 
+                    uids = package.UpdateId;
+
                     //Automatically convert WSA file suffix name to msixbundle
                     string fullPackageName;
                     if (package.PackageMoniker.IndexOf("WindowsSubsystemForAndroid") > 0)
@@ -61,9 +64,11 @@ namespace CoreTool.Loaders.Windows
                     Item item = new Item(Utils.GetVersionFromName(fullPackageName));
                     item.Archs[Utils.GetArchFromName(fullPackageName)] = new Arch(fullPackageName, new List<string>() { Guid.Parse(package.UpdateId).ToString() });
                     if (archive.AddOrUpdate(item, true)) archive.Logger.Write($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+
                     //output download url without downloading
                     archive.Logger.WriteWarn($"File Name: {fullPackageName}");
                     archive.Logger.WriteWarn($"URL: {package.PackageUri.OriginalString}");
+                    archive.Logger.WriteWarn($"UpdateId: {package.UpdateId}");
 
                     releaseVer = Utils.GetVersionFromName(fullPackageName);
                 }
@@ -71,11 +76,17 @@ namespace CoreTool.Loaders.Windows
 
             if (!hasBeta) return;
 
+            //set re-login flag
+            a: 
+
             // Make sure we have a token, if not don't bother checking for betas
             string token = await Utils.GetMicrosoftToken("msAuthInfo.json", scope);
             if (token == "")
             {
-                archive.Logger.WriteError("Failed to get token! Unable to fetch beta.");
+                archive.Logger.WriteError("You need re-login to fetch beta vesion.");
+                if (File.Exists(Path.GetFullPath("msAuthInfo.json")))
+                    File.Delete(Path.GetFullPath("msAuthInfo.json"));
+                goto a;
             }
             else
             {
@@ -91,6 +102,7 @@ namespace CoreTool.Loaders.Windows
                 if (dcathandler.Result == DisplayCatalogResult.Found)
                 {
                     packages = await dcathandler.GetPackagesForProductAsync($"<User>{await Utils.GetMicrosoftToken("msAuthInfo.json")}</User>");
+                    bool flag = true;
                     foreach (PackageInstance package in packages)
                     {
                         if (!package.PackageMoniker.StartsWith(packageName + "_")) continue;
@@ -107,13 +119,21 @@ namespace CoreTool.Loaders.Windows
 
                         //string fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
 
-                        
+                        //check if token is invaild by wsa updateid
+                        if (package.UpdateId == uids && package.PackageMoniker.IndexOf("WindowsSubsystemForAndroid") > 0)
+                        {
+                            archive.Logger.WriteError($"You need re-login to fetch beta vesion.");
+                            if (File.Exists(Path.GetFullPath("msAuthInfo.json")))
+                                File.Delete(Path.GetFullPath("msAuthInfo.json"));
+                            goto a;
+                        }
 
                         // Check we haven't got a release version in the beta request
-                        if (Utils.GetVersionFromName(fullPackageName) == releaseVer)
+                        if (Utils.GetVersionFromName(fullPackageName) == releaseVer && flag)
                         {
-                            archive.Logger.WriteError($"You need to opt into the beta! Release version found in beta request.");
-                            break;
+                            flag = false;
+                            archive.Logger.WriteError($"There is currently no beta version available.");
+                            archive.Logger.WriteWarn($"Current version: {Utils.GetVersionFromName(fullPackageName)}");
                         }
 
                         // Create the meta and store it
@@ -122,8 +142,10 @@ namespace CoreTool.Loaders.Windows
                         if (archive.AddOrUpdate(item, true)) archive.Logger.WriteWarn($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
 
                         //output download url without downloading
+                        
                         archive.Logger.WriteWarn($"File Name: {fullPackageName}");
                         archive.Logger.WriteWarn($"URL: {package.PackageUri.OriginalString}");
+                        archive.Logger.WriteWarn($"UpdateId: {package.UpdateId}");
                     }
                 }
             }
