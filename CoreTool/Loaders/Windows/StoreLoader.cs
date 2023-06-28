@@ -41,6 +41,12 @@ namespace CoreTool.Loaders.Windows
             await dcathandler.QueryDCATAsync(this.packageId);
             if (dcathandler.Result == DisplayCatalogResult.Found)
             {
+                //add latest version number save
+                string latestVer = "0.0.0.0";
+
+                //a counter to count the number of available urls
+                int count = 0;
+
                 packages = await dcathandler.GetPackagesForProductAsync();
                 foreach (PackageInstance package in packages)
                 {
@@ -57,8 +63,11 @@ namespace CoreTool.Loaders.Windows
                     if (package.PackageMoniker.IndexOf("WindowsSubsystemForAndroid") > 0)
                     fullPackageName = package.PackageMoniker + ".Msixbundle";
                     else fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
-                    
                     //string fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
+
+                    //check and save the latest version number
+                    if(Utils.GetVersionFromName(fullPackageName).CompareTo(latestVer) > 0)
+                        latestVer = Utils.GetVersionFromName(fullPackageName);
                     
                     // Create the meta and store it
                     Item item = new Item(Utils.GetVersionFromName(fullPackageName));
@@ -69,9 +78,17 @@ namespace CoreTool.Loaders.Windows
                     archive.Logger.WriteWarn($"File Name: {fullPackageName}");
                     archive.Logger.WriteWarn($"URL: {package.PackageUri.OriginalString}");
                     archive.Logger.WriteWarn($"UpdateId: {package.UpdateId}");
+                    count++;
 
                     releaseVer = Utils.GetVersionFromName(fullPackageName);
                 }
+
+                //output the number of available urls
+                archive.Logger.Write($"{"Successfully fetch " + count + " urls!"}");
+
+                //make sure the release version is the latest version
+                releaseVer = latestVer;
+                archive.Logger.WriteWarn($"Latest released version: {latestVer}");
             }
 
             if (!hasBeta) return;
@@ -102,7 +119,16 @@ namespace CoreTool.Loaders.Windows
                 if (dcathandler.Result == DisplayCatalogResult.Found)
                 {
                     packages = await dcathandler.GetPackagesForProductAsync($"<User>{await Utils.GetMicrosoftToken("msAuthInfo.json")}</User>");
-                    bool flag = true;
+
+                    //add latest version number save
+                    string latestBetaVer = "0.0.0.0";
+
+                    //a flag to save if it has a beta version 
+                    bool flag = false;
+
+                    //a counter to count the number of available urls
+                    int count = 0;
+
                     foreach (PackageInstance package in packages)
                     {
                         if (!package.PackageMoniker.StartsWith(packageName + "_")) continue;
@@ -128,13 +154,14 @@ namespace CoreTool.Loaders.Windows
                             goto a;
                         }
 
-                        // Check we haven't got a release version in the beta request
-                        if (Utils.GetVersionFromName(fullPackageName) == releaseVer && flag)
-                        {
+                        // Check if it return a release version in the beta request
+                        if (Utils.GetVersionFromName(fullPackageName).CompareTo(releaseVer) <= 0)
                             flag = false;
-                            archive.Logger.WriteError($"There is currently no beta version available.");
-                            archive.Logger.WriteWarn($"Current version: {Utils.GetVersionFromName(fullPackageName)}");
-                        }
+                        else flag = true;
+
+                        //check and save the latest beta version number
+                        if (Utils.GetVersionFromName(fullPackageName).CompareTo(latestBetaVer) > 0)
+                            latestBetaVer = Utils.GetVersionFromName(fullPackageName);
 
                         // Create the meta and store it
                         Item item = new Item(Utils.GetVersionFromName(fullPackageName));
@@ -142,10 +169,22 @@ namespace CoreTool.Loaders.Windows
                         if (archive.AddOrUpdate(item, true)) archive.Logger.WriteWarn($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
 
                         //output download url without downloading
-                        
                         archive.Logger.WriteWarn($"File Name: {fullPackageName}");
                         archive.Logger.WriteWarn($"URL: {package.PackageUri.OriginalString}");
                         archive.Logger.WriteWarn($"UpdateId: {package.UpdateId}");
+                        count++;
+                    }
+
+                    //output the number of available urls
+                    archive.Logger.Write($"{"Successfully fetch " + count + " urls!"}");
+
+                    //output the beta version info
+                    if (flag)
+                        archive.Logger.WriteWarn($"Latest beta version: {latestBetaVer}");
+                    else
+                    {
+                        archive.Logger.WriteError($"There is currently no beta version available.");
+                        archive.Logger.WriteWarn($"Current version: {releaseVer}");
                     }
                 }
             }
