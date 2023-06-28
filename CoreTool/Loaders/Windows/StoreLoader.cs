@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CoreTool.Loaders.Windows
 {
@@ -47,6 +48,9 @@ namespace CoreTool.Loaders.Windows
                 //a counter to count the number of available urls
                 int count = 0;
 
+                archive.Logger.Write("Available urls list:");
+                Console.WriteLine("");
+
                 packages = await dcathandler.GetPackagesForProductAsync();
                 foreach (PackageInstance package in packages)
                 {
@@ -74,10 +78,20 @@ namespace CoreTool.Loaders.Windows
                     item.Archs[Utils.GetArchFromName(fullPackageName)] = new Arch(fullPackageName, new List<string>() { Guid.Parse(package.UpdateId).ToString() });
                     if (archive.AddOrUpdate(item, true)) archive.Logger.Write($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
 
-                    //output download url without downloading
-                    archive.Logger.WriteWarn($"File Name: {fullPackageName}");
-                    archive.Logger.WriteWarn($"URL: {package.PackageUri.OriginalString}");
-                    archive.Logger.WriteWarn($"UpdateId: {package.UpdateId}");
+                    //make a url list output
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"Version: {Utils.GetVersionFromName(fullPackageName)}");
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    if (Utils.GetArchFromName(fullPackageName) == "neutral")
+                        Console.WriteLine($"Arch: All in one");
+                    else
+                        Console.WriteLine($"Arch: {Utils.GetArchFromName(fullPackageName)}");
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"File Name: {fullPackageName}");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"URL: {package.PackageUri.OriginalString}");
+                    Console.WriteLine("");
+                    Console.ResetColor();
                     count++;
 
                     releaseVer = Utils.GetVersionFromName(fullPackageName);
@@ -129,6 +143,9 @@ namespace CoreTool.Loaders.Windows
                     //a counter to count the number of available urls
                     int count = 0;
 
+                    archive.Logger.Write("Available urls list:");
+                    Console.WriteLine("");
+
                     foreach (PackageInstance package in packages)
                     {
                         if (!package.PackageMoniker.StartsWith(packageName + "_")) continue;
@@ -168,10 +185,20 @@ namespace CoreTool.Loaders.Windows
                         item.Archs[Utils.GetArchFromName(fullPackageName)] = new Arch(fullPackageName, new List<string>() { Guid.Parse(package.UpdateId).ToString() });
                         if (archive.AddOrUpdate(item, true)) archive.Logger.WriteWarn($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
 
-                        //output download url without downloading
-                        archive.Logger.WriteWarn($"File Name: {fullPackageName}");
-                        archive.Logger.WriteWarn($"URL: {package.PackageUri.OriginalString}");
-                        archive.Logger.WriteWarn($"UpdateId: {package.UpdateId}");
+                        //make a url list output
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine($"Version: {Utils.GetVersionFromName(fullPackageName)}");
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        if(Utils.GetArchFromName(fullPackageName) == "neutral")
+                            Console.WriteLine($"Arch: All in one");
+                        else
+                            Console.WriteLine($"Arch: {Utils.GetArchFromName(fullPackageName)}");
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine($"File Name: {fullPackageName}");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"URL: {package.PackageUri.OriginalString}");
+                        Console.WriteLine("");
+                        Console.ResetColor();
                         count++;
                     }
 
