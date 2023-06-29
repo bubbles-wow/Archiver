@@ -98,7 +98,12 @@ namespace CoreTool.Loaders.Windows
                 }
 
                 //output the number of available urls
-                archive.Logger.Write($"{"Successfully fetch " + count + " urls!"}");
+                if (count > 1)
+                    archive.Logger.Write($"{"Successfully fetch " + count + " urls!"}");
+                else if(count == 1)
+                    archive.Logger.Write("Successfully fetch 1 url!");
+                else 
+                    archive.Logger.WriteError("No available urls!");
 
                 //make sure the release version is the latest version
                 releaseVer = latestVer;
@@ -203,7 +208,12 @@ namespace CoreTool.Loaders.Windows
                     }
 
                     //output the number of available urls
-                    archive.Logger.Write($"{"Successfully fetch " + count + " urls!"}");
+                    if (count > 1)
+                        archive.Logger.Write($"{"Successfully fetch " + count + " urls!"}");
+                    else if (count == 1)
+                        archive.Logger.Write("Successfully fetch 1 url!");
+                    else
+                        archive.Logger.WriteError("No available urls!");
 
                     //output the beta version info
                     if (flag)
