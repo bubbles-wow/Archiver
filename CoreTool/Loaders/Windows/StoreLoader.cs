@@ -176,14 +176,13 @@ namespace CoreTool.Loaders.Windows
                             goto a;
                         }
 
-                        // Check if it return a release version in the beta request
-                        if (Utils.GetVersionFromName(fullPackageName).CompareTo(releaseVer) <= 0)
-                            flag = false;
-                        else flag = true;
-
                         //check and save the latest beta version number
                         if (Utils.GetVersionFromName(fullPackageName).CompareTo(latestBetaVer) > 0)
                             latestBetaVer = Utils.GetVersionFromName(fullPackageName);
+
+                        // Check if it return a release version in the beta request
+                        if (latestBetaVer.CompareTo(releaseVer) > 0)
+                            flag = true;
 
                         // Create the meta and store it
                         Item item = new Item(Utils.GetVersionFromName(fullPackageName));
@@ -221,7 +220,7 @@ namespace CoreTool.Loaders.Windows
                     else
                     {
                         archive.Logger.WriteError($"There is currently no beta version available.");
-                        archive.Logger.WriteWarn($"Current version: {releaseVer}");
+                        archive.Logger.WriteWarn($"Current version: {latestBetaVer}");
                     }
                 }
             }
