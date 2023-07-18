@@ -3,6 +3,7 @@ using StoreLib.Models;
 using StoreLib.Services;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,7 +77,10 @@ namespace CoreTool.Loaders.Windows
                     // Create the meta and store it
                     Item item = new Item(Utils.GetVersionFromName(fullPackageName));
                     item.Archs[Utils.GetArchFromName(fullPackageName)] = new Arch(fullPackageName, new List<string>() { Guid.Parse(package.UpdateId).ToString() });
-                    if (archive.AddOrUpdate(item, true)) archive.Logger.Write($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+                    //if (archive.AddOrUpdate(item, true)) archive.Logger.WriteWarn($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    if (archive.AddOrUpdate(item, true))
+                        Console.WriteLine($"New version registered!");
 
                     //make a url list output
                     Console.ForegroundColor = ConsoleColor.Blue;
@@ -187,7 +191,10 @@ namespace CoreTool.Loaders.Windows
                         // Create the meta and store it
                         Item item = new Item(Utils.GetVersionFromName(fullPackageName));
                         item.Archs[Utils.GetArchFromName(fullPackageName)] = new Arch(fullPackageName, new List<string>() { Guid.Parse(package.UpdateId).ToString() });
-                        if (archive.AddOrUpdate(item, true)) archive.Logger.WriteWarn($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+                        //if (archive.AddOrUpdate(item, true)) archive.Logger.WriteWarn($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        if (archive.AddOrUpdate(item, true))
+                            Console.WriteLine($"New version registered!");
 
                         //make a url list output
                         Console.ForegroundColor = ConsoleColor.Blue;
