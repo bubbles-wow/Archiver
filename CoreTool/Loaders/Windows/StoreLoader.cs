@@ -8,6 +8,8 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace CoreTool.Loaders.Windows
 {
@@ -71,9 +73,16 @@ namespace CoreTool.Loaders.Windows
                     //string fullPackageName = package.PackageMoniker + (platformTarget == 0 ? ".Appx" : ".AppxBundle");
 
                     //check and save the latest version number
-                    if(Utils.GetVersionFromName(fullPackageName).CompareTo(latestVer) > 0)
+                    if (Utils.GetVersionFromName(fullPackageName).CompareTo(latestVer) > 0)
+                    {
                         latestVer = Utils.GetVersionFromName(fullPackageName);
-                    
+                        /*
+                        //save the release url
+                        if (package.PackageMoniker.IndexOf("WindowsSubsystemForAndroid") > 0)
+                            File.WriteAllText("WSAreleaseurl.txt", package.PackageUri.OriginalString);
+                        */
+                    }
+
                     // Create the meta and store it
                     Item item = new Item(Utils.GetVersionFromName(fullPackageName));
                     item.Archs[Utils.GetArchFromName(fullPackageName)] = new Arch(fullPackageName, new List<string>() { Guid.Parse(package.UpdateId).ToString() });
@@ -123,6 +132,7 @@ namespace CoreTool.Loaders.Windows
             string token = await Utils.GetMicrosoftToken("msAuthInfo.json", scope);
             if (token == "")
             {
+                archive.Logger.WriteError("The token is null!");
                 archive.Logger.WriteError("You need re-login to fetch beta vesion.");
                 if (File.Exists(Path.GetFullPath("msAuthInfo.json")))
                     File.Delete(Path.GetFullPath("msAuthInfo.json"));
@@ -130,6 +140,8 @@ namespace CoreTool.Loaders.Windows
             }
             else
             {
+                archive.Logger.WriteWarn($"User Token: {token}");
+                //File.WriteAllText("usertoken.txt", token);
                 archive.Logger.Write("Loading beta...");
 
                 // Grab the packages for the beta using auth
@@ -182,7 +194,12 @@ namespace CoreTool.Loaders.Windows
 
                         //check and save the latest beta version number
                         if (Utils.GetVersionFromName(fullPackageName).CompareTo(latestBetaVer) > 0)
+                        {
                             latestBetaVer = Utils.GetVersionFromName(fullPackageName);
+                            //save the beta url
+                            if (package.PackageMoniker.IndexOf("WindowsSubsystemForAndroid") > 0)
+                                File.WriteAllText("WSAbetaurl.txt", package.PackageUri.OriginalString);
+                        }
 
                         // Check if it return a release version in the beta request
                         if (latestBetaVer.CompareTo(releaseVer) > 0)

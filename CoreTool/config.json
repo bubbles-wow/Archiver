@@ -6,108 +6,83 @@
   },
   "Archives": [
     {
-      "Name": "W10",
-      "Directory": ".\\Windows10 - Microsoft.MinecraftUWP_8wekyb3d8bbwe\\",
+      "Name": "Windows Subsystem For Android",
+      "Directory": ".\\Data\\Windows Subsystem For Android\\",
+      "Loaders": [
+        {
+          "Class": "CoreTool.Loaders.FileLoader",
+          "Params": [
+            "msix",
+            "msixbundle"
+          ]
+        },
+        {
+          "Class": "CoreTool.Loaders.Windows.StoreLoader",
+          "Params": [
+            "9P3395VX91NR",
+            "MicrosoftCorporationII.WindowsSubsystemForAndroid"
+          ]
+        }
+      ],
+      "Checkers": [/*
+        {
+          "Class": "CoreTool.Checkers.MetaChecker"
+        },
+        {
+          "Class": "CoreTool.Checkers.Windows.FileChecker"
+        },*/
+        {
+          "Class": "CoreTool.Checkers.HashChecker"
+        }
+      ]
+    },
+    {
+      "Name": "Minecraft for Windows",
+      "Directory": ".\\Data\\Minecraft for Windows\\",
       "Loaders": [
         {
           "Class": "CoreTool.Loaders.FileLoader"
-        },
+        },/*
         {
           "Class": "CoreTool.Loaders.Windows.VersionDBLoader",
           "Params": [
             "Microsoft.MinecraftUWP"
           ]
-        },
+        },*/
         {
           "Class": "CoreTool.Loaders.Windows.StoreLoader",
           "Params": [
             "9NBLGGH2JHXJ",
-            "Microsoft.MinecraftUWP"
+            "Microsoft.MinecraftUWP",
+            false
           ]
         }
       ],
-      "Checkers": [
+      "Checkers": [/*
         {
           "Class": "CoreTool.Checkers.MetaChecker"
         },
         {
           "Class": "CoreTool.Checkers.Windows.FileChecker"
-        },
+        },*/
         {
           "Class": "CoreTool.Checkers.HashChecker"
         }
       ]
     },
     {
-      "Name": "Xbox",
-      "Directory": ".\\Xbox - Microsoft.MinecraftUWPConsole_8wekyb3d8bbwe\\",
+      "Name": "Minecraft Preview for Windows",
+      "Directory": ".\\Data\\Minecraft Preview for Windows\\",
       "Loaders": [
         {
           "Class": "CoreTool.Loaders.FileLoader"
-        },
-        {
-          "Class": "CoreTool.Loaders.Windows.StoreLoader",
-          "Params": [
-            "9NBLGGH537BL",
-            "Microsoft.MinecraftUWPConsole"
-          ]
-        }
-      ],
-      "Checkers": [
-        {
-          "Class": "CoreTool.Checkers.MetaChecker"
-        },
-        {
-          "Class": "CoreTool.Checkers.Windows.FileChecker"
-        },
-        {
-          "Class": "CoreTool.Checkers.HashChecker"
-        }
-      ]
-    },
-    {
-      "Name": "Xbox Preview",
-      "Directory": ".\\Xbox - Microsoft.MinecraftUWPBeta_8wekyb3d8bbwe\\",
-      "Loaders": [
-        {
-          "Class": "CoreTool.Loaders.FileLoader"
-        },
-        {
-          "Class": "CoreTool.Loaders.Windows.StoreLoader",
-          "Params": [
-            "9MTK992XRFL2",
-            "Microsoft.MinecraftUWPBeta",
-            true,
-            true,
-            "service::www.microsoft.com::mbi_ssl"
-          ]
-        }
-      ],
-      "Checkers": [
-        {
-          "Class": "CoreTool.Checkers.MetaChecker"
-        },
-        {
-          "Class": "CoreTool.Checkers.Windows.FileChecker"
-        },
-        {
-          "Class": "CoreTool.Checkers.HashChecker"
-        }
-      ]
-    },
-    {
-      "Name": "W10 Preview",
-      "Directory": ".\\Windows10 - Microsoft.MinecraftWindowsBeta_8wekyb3d8bbwe\\",
-      "Loaders": [
-        {
-          "Class": "CoreTool.Loaders.FileLoader"
-        },
+        },/*
         {
           "Class": "CoreTool.Loaders.Windows.VersionDBLoader",
           "Params": [
             "Microsoft.MinecraftWindowsBeta"
           ]
-        },
+        },*/
         {
           "Class": "CoreTool.Loaders.Windows.StoreLoader",
           "Params": [
@@ -117,26 +92,25 @@
           ]
         }
       ],
-      "Checkers": [
+      "Checkers": [/*
         {
           "Class": "CoreTool.Checkers.MetaChecker"
         },
         {
           "Class": "CoreTool.Checkers.Windows.FileChecker"
-        },
+        },*/
         {
           "Class": "CoreTool.Checkers.HashChecker"
         }
       ]
     },
     {
-      "Name": "Edu",
-      "Directory": ".\\Windows10 - Microsoft.MinecraftEducationEdition_8wekyb3d8bbwe\\",
+      "Name": "Minecraft Education Windows Store",
+      "Directory": ".\\Data\\Minecraft Education Windows Store\\",
       "Loaders": [
         {
           "Class": "CoreTool.Loaders.FileLoader",
           "Params": [
-            "appx",
             "appxbundle"
           ]
         },
@@ -144,31 +118,52 @@
           "Class": "CoreTool.Loaders.Windows.StoreLoader",
           "Params": [
             "9NBLGGH4R2R6",
-            "Microsoft.MinecraftEducationEdition",
-            false
+            "Microsoft.MinecraftEducationEdition"
           ]
         }
       ],
-      "Checkers": [
+      "Checkers": [/*
         {
           "Class": "CoreTool.Checkers.MetaChecker"
         },
         {
           "Class": "CoreTool.Checkers.Windows.FileChecker"
-        },
+        },*/
         {
           "Class": "CoreTool.Checkers.HashChecker"
         }
       ]
     },
+    
     {
-      "Name": "Android-PE",
-      "Directory": ".\\Android - com.mojang.minecraftpe\\",
+      "Name": "Minecraft Education Appx",
+      "Directory": ".\\Data\\Minecraft Education Appx\\",
       "Loaders": [
         {
           "Class": "CoreTool.Loaders.FileLoader",
           "Params": [
-            "apk"
+            "appx",
+            "appxbundle"
+          ]
+        }
+      ],
+      "Checkers": [
+        {
+          "Class": "CoreTool.Checkers.HashChecker"
+        }
+      ]
+    }/*,
+    {
+      "Name": "Minecraft Android",
+      "Directory": ".\\Data\\Minecraft Android\\",
+      "Loaders": [
+        {
+          "Class": "CoreTool.Loaders.FileLoader",
+          "Params": [
+            "apk",
+            "apks",
+            "xapk",
+            "aab"
           ]
         },
         {
@@ -178,7 +173,7 @@
       "Checkers": [
         {
           "Class": "CoreTool.Checkers.MetaChecker"
-        },
+        }/*,
         {
           "Class": "CoreTool.Checkers.Android.FileChecker",
           "Params": [
@@ -217,19 +212,46 @@
       ]
     },
     {
-      "Name": "Android-Edu",
-      "Directory": ".\\Android - com.mojang.minecraftedu\\",
+      "Name": "Minecraft Education Android",
+      "Directory": ".\\Data\\Minecraft Education Android\\",
       "Loaders": [
         {
           "Class": "CoreTool.Loaders.FileLoader",
           "Params": [
-            "apk"
+            "apk",
+            "apks",
+            "xapk",
+            "aab"
           ]
         }
       ],
       "Checkers": [
         {
           "Class": "CoreTool.Checkers.MetaChecker"
+        }/*,
+        {
+          "Class": "CoreTool.Checkers.Android.FileChecker",
+          "Params": [
+            "com.mojang.minecraftedu",
+            "arm64-v8a",
+            "octopus.properties"
+          ]
+        },
+        {
+          "Class": "CoreTool.Checkers.Android.FileChecker",
+          "Params": [
+            "com.mojang.minecraftedu",
+            "armeabi-v7a",
+            "octopus.properties"
+          ]
+        },
+        {
+          "Class": "CoreTool.Checkers.Android.FileChecker",
+          "Params": [
+            "com.mojang.minecraftedu",
+            "x86",
+            "octopus.properties"
+          ]
         },
         {
           "Class": "CoreTool.Checkers.Android.FileChecker",
@@ -243,6 +265,6 @@
           "Class": "CoreTool.Checkers.HashChecker"
         }
       ]
-    }
+    }*/
   ]
 }
