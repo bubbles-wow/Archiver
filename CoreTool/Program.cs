@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
@@ -36,7 +37,7 @@ namespace CoreTool
             {
                 await gitSync.Check();
             }
-
+            
             Utils.GenericLogger.Write("Done startup!");
 
             Utils.GenericLogger.Write("Starting update checker");
@@ -46,9 +47,9 @@ namespace CoreTool
             updateTimer.Elapsed += OnUpdateEvent;
             updateTimer.AutoReset = true;
             updateTimer.Enabled = true;
-
+            
             Utils.GenericLogger.Write("Will exit after 60 seconds.");
-
+            
             //notify system
             {
                 string str = "python notification.py";
@@ -64,8 +65,6 @@ namespace CoreTool
 
                 //向cmd窗口发送输入信息
                 p.StandardInput.WriteLine(str + "&exit");
-
-                p.StandardInput.WriteLine("taskkill /f /im coretool.exe" + "&exit");
 
                 p.StandardInput.AutoFlush = true;
                 //p.StandardInput.WriteLine("exit");
@@ -92,13 +91,15 @@ namespace CoreTool
                 Console.WriteLine(output);
             }
 
-            //Utils.GenericLogger.Write("Press enter to exit at any point");
-            //Console.ReadLine();
-            /*
+            //Process.GetCurrentProcess().Kill();
+
+            Utils.GenericLogger.Write("Press enter to exit at any point");
+            Console.ReadLine();
+            
             //delete AuthInfo
             if (File.Exists(Path.GetFullPath("msAuthInfo.json")))
                 File.Delete(Path.GetFullPath("msAuthInfo.json"));
-            */
+            
         }
 
         private static async void OnUpdateEvent(object sender, ElapsedEventArgs e)

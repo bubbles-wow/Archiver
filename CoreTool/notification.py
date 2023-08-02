@@ -76,6 +76,7 @@ if currentversion != checkedversion:
         f.close()
 else:
     print("No update for WSA!")
-for i in range(60,0,-1):
-    print(f'\rWill exit after {i} seconds.',end='')  #\r让光标回到行首 ，end=''--结束符为空，即不换行
-    time.sleep(1) #让程序等待1秒
+
+#for i in range(60,0,-1):
+#    print(f'\rWill exit after {i} seconds.',end='')  #\r让光标回到行首 ，end=''--结束符为空，即不换行
+#    time.sleep(1) #让程序等待1秒
