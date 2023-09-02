@@ -85,7 +85,11 @@ namespace CoreTool.Loaders.Windows
                     // Create the meta and store it
                     Item item = new Item(Utils.GetVersionFromName(fullPackageName));
                     item.Archs[Utils.GetArchFromName(fullPackageName)] = new Arch(fullPackageName, new List<string>() { Guid.Parse(package.UpdateId).ToString() });
-                    if (archive.AddOrUpdate(item, true)) archive.Logger.Write($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+                    if (archive.AddOrUpdate(item, true))
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+                    }
 
                     //make a url list output
                     Console.ForegroundColor = ConsoleColor.Blue;
@@ -136,7 +140,6 @@ namespace CoreTool.Loaders.Windows
             }
             else
             {
-                archive.Logger.WriteWarn($"User Token: {token}");
                 //File.WriteAllText("usertoken.txt", token);
                 archive.Logger.Write("Loading beta...");
 
@@ -193,8 +196,10 @@ namespace CoreTool.Loaders.Windows
                         {
                             latestBetaVer = Utils.GetVersionFromName(fullPackageName);
                             //save the beta url
+                            /*
                             if (package.PackageMoniker.IndexOf("WindowsSubsystemForAndroid") > 0)
                                 File.WriteAllText("WSAbetaurl.txt", package.PackageUri.OriginalString);
+                            */
                         }
 
                         // Check if it return a release version in the beta request
@@ -204,7 +209,11 @@ namespace CoreTool.Loaders.Windows
                         // Create the meta and store it
                         Item item = new Item(Utils.GetVersionFromName(fullPackageName));
                         item.Archs[Utils.GetArchFromName(fullPackageName)] = new Arch(fullPackageName, new List<string>() { Guid.Parse(package.UpdateId).ToString() });
-                        if (archive.AddOrUpdate(item, true)) archive.Logger.WriteWarn($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+                        if (archive.AddOrUpdate(item, true))
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.WriteLine($"New version registered: {Utils.GetVersionFromName(fullPackageName)}");
+                        }
 
                         //make a url list output
                         Console.ForegroundColor = ConsoleColor.Blue;
