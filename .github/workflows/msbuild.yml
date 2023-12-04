@@ -31,7 +31,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Archiver
-        path: CoreTool\bin\x64\Release\net6.0-windows\win-x64\publish
+        path: CoreTool\bin\x64\Release\net8.0-windows7.0\win-x64\publish
 
     - name: Archive DataStoreExtractor
       uses: actions/upload-artifact@v2
